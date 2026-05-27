@@ -1,10 +1,10 @@
-"""Pygame renderer for Gomoku. Pure display, no game logic."""
+"""五子棋Pygame渲染器。纯显示，不含游戏逻辑。"""
 
 import pygame
 import os
 from board import BOARD_SIZE, EMPTY, BLACK, WHITE
 
-# Layout constants
+# 布局常量
 WINDOW_W = 800
 WINDOW_H = 700
 BOARD_X = 30
@@ -14,7 +14,7 @@ CELL_SIZE = BOARD_PX // (BOARD_SIZE - 1)
 TOP_BAR_H = 50
 BOTTOM_BAR_H = 50
 
-# Colors
+# 颜色定义
 COLOR_BG = (222, 184, 104)
 COLOR_LINE = (92, 74, 30)
 COLOR_STAR = (92, 74, 30)

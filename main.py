@@ -1,3 +1,5 @@
+"""五子棋游戏主入口。"""
+
 import pygame
 import sys
 
@@ -13,7 +15,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill((222, 184, 104))
+        screen.fill((222, 184, 104))  # 木质背景色
         pygame.display.flip()
         clock.tick(60)
 
