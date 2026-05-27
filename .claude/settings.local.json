@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"E:/2026-项目/WZQ/\" status)",
+      "Bash(bash *)",
+      "Skill(update-config)",
+      "Bash(git init *)",
+      "Bash(python -m venv .venv)",
+      "Bash(.venv/Scripts/pip install *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
