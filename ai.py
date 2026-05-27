@@ -14,11 +14,11 @@ SCORES = {
     'sleep_two': 50,       # 眠二
 }
 
-# 难度配置
+# 难度配置（降低困难模式的候选数和深度，避免卡死）
 DIFFICULTY = {
     'easy': {'depth': 2, 'candidates': 5, 'randomize': True},
-    'medium': {'depth': 4, 'candidates': 8, 'randomize': False},
-    'hard': {'depth': 6, 'candidates': 15, 'randomize': False},
+    'medium': {'depth': 3, 'candidates': 8, 'randomize': False},
+    'hard': {'depth': 4, 'candidates': 10, 'randomize': False},
 }
 
 # 四个方向：水平、垂直、两条对角线
@@ -34,12 +34,17 @@ class AI:
 
     def get_move(self, board):
         """获取AI的落子位置，返回(行, 列)元组。"""
-        candidates = self._get_candidates(board)
-        if not candidates:
-            return (7, 7)  # 默认下天元
-
         if board.move_count() == 0:
             return (7, 7)  # 先手下天元
+
+        candidates = self._get_candidates(board)
+        if not candidates:
+            return (7, 7)
+
+        # 检查是否有必胜/必防的紧急着法
+        urgent = self._find_urgent_move(board, candidates)
+        if urgent:
+            return urgent
 
         best_score = float('-inf')
         best_moves = []
@@ -61,6 +66,26 @@ class AI:
             return random.choice(pool)
 
         return best_moves[0]
+
+    def _find_urgent_move(self, board, candidates):
+        """检测紧急着法：能赢就赢，能防就防。"""
+        # 先检查自己能不能赢
+        for row, col in candidates:
+            board.place(row, col, self.color)
+            if self._check_win_fast(board.grid, row, col):
+                board.undo()
+                return (row, col)
+            board.undo()
+
+        # 再检查对手能不能赢（必须防守）
+        for row, col in candidates:
+            board.place(row, col, self.opponent)
+            if self._check_win_fast(board.grid, row, col):
+                board.undo()
+                return (row, col)
+            board.undo()
+
+        return None
 
     def _minimax(self, board, depth, alpha, beta, is_maximizing):
         """Minimax搜索 + Alpha-Beta剪枝。"""
