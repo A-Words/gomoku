@@ -34,6 +34,7 @@ class Game:
         self.status_text = ""
         self.record = GameRecord()
         self.replay_ctrl = None
+        self.game_over_buttons = (None, None)
 
     def run(self):
         """游戏主循环。"""
@@ -106,6 +107,8 @@ class Game:
             self._handle_difficulty_click(pos)
         elif self.state == STATE_PLAYING:
             self._handle_play_click(pos)
+        elif self.state == STATE_GAME_OVER:
+            self._handle_game_over_click(pos)
         elif self.state == STATE_REPLAY_SELECT:
             self._handle_replay_select_click(pos)
         elif self.state == STATE_REPLAY:
@@ -128,6 +131,14 @@ class Game:
                     self.state = STATE_DIFFICULTY
                 elif value == "replay":
                     self._show_replay_list()
+
+    def _handle_game_over_click(self, pos):
+        """处理游戏结束弹窗点击。"""
+        restart_rect, menu_rect = self.game_over_buttons
+        if restart_rect and restart_rect.collidepoint(pos):
+            self._restart()
+        elif menu_rect and menu_rect.collidepoint(pos):
+            self._back_to_menu()
 
     def _handle_difficulty_click(self, pos):
         """处理难度选择点击。"""
@@ -404,7 +415,7 @@ class Game:
             self.renderer.draw_top_bar(self.current_player, mode_text)
             self.renderer.draw_bottom_bar(self.status_text, self.board.move_count(), mode_text)
             self.renderer.draw_side_panel(self._get_play_buttons(), self.board.move_count(), mode_text)
-            self.renderer.draw_game_over(self.status_text)
+            self.game_over_buttons = self.renderer.draw_game_over(self.status_text)
 
         elif self.state == STATE_REPLAY_SELECT:
             self._draw_replay_list(mouse_pos)

@@ -244,15 +244,26 @@ class Renderer:
         overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 120))
         self.screen.blit(overlay, (0, 0))
-        box_rect = self.scale_rect(WINDOW_W // 2 - 160, WINDOW_H // 2 - 80, 320, 160)
+        box_rect = self.scale_rect(WINDOW_W // 2 - 180, WINDOW_H // 2 - 100, 360, 200)
         pygame.draw.rect(self.screen, COLOR_PANEL_BG, box_rect, border_radius=self._scale_len(12))
         pygame.draw.rect(self.screen, COLOR_LINE, box_rect, self._scale_len(2), border_radius=self._scale_len(12))
         text = self.font_large.render(winner_text, True, COLOR_TEXT)
         self.screen.blit(text, (box_rect.centerx - text.get_width() // 2,
-                                 box_rect.y + self._scale_len(30)))
-        hint = self.font_small.render("按 R 重新开始 | 按 M 返回菜单", True, COLOR_TEXT)
-        self.screen.blit(hint, (box_rect.centerx - hint.get_width() // 2,
-                                 box_rect.y + self._scale_len(110)))
+                                 box_rect.y + self._scale_len(25)))
+        btn_w, btn_h = self._scale_len(140), self._scale_len(42)
+        gap = self._scale_len(20)
+        btn_y = box_rect.y + self._scale_len(110)
+        restart_rect = pygame.Rect(box_rect.centerx - btn_w - gap // 2, btn_y, btn_w, btn_h)
+        menu_rect = pygame.Rect(box_rect.centerx + gap // 2, btn_y, btn_w, btn_h)
+        mouse_pos = pygame.mouse.get_pos()
+        for rect, label in [(restart_rect, "重新开始"), (menu_rect, "返回菜单")]:
+            hover = rect.collidepoint(mouse_pos)
+            color = COLOR_BUTTON_HOVER if hover else COLOR_BUTTON
+            pygame.draw.rect(self.screen, color, rect, border_radius=self._scale_len(8))
+            t = self.font_medium.render(label, True, COLOR_BUTTON_TEXT)
+            self.screen.blit(t, (rect.centerx - t.get_width() // 2,
+                                  rect.centery - t.get_height() // 2))
+        return restart_rect, menu_rect
 
     def draw_replay_bar(self, current_step, total_steps):
         bar_y = WINDOW_H - 60
