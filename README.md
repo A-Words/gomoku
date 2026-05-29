@@ -12,10 +12,10 @@
 
 # 五子棋 · Gomoku
 
-**基于 Pygame 的五子棋对弈游戏，内置 Minimax + Alpha-Beta 剪枝 AI、经典棋谱回放与完整的对局管理系统。**
+**基于 Pygame-CE 的五子棋对弈游戏，内置 Minimax + Alpha-Beta 剪枝 AI、经典棋谱回放、窗口缩放与完整的对局管理系统。**
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Pygame](https://img.shields.io/Pygame-2.5+-00979D?style=for-the-badge&logo=pygame&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pygame-CE](https://img.shields.io/badge/Pygame--CE-2.5.7+-00979D?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey?style=for-the-badge)
@@ -33,6 +33,12 @@
 | **双人对弈** | 本地双人轮流落子，支持悔棋 |
 | **人机对战** | 对抗 AI，三档难度可选 |
 | **棋谱回放** | 内置 3 局经典棋谱 + 自定义保存，支持逐步回放与中途接管 |
+
+### 🪟 可缩放窗口
+
+- 使用 `pygame.RESIZABLE` 创建窗口，支持拖拽改变窗口大小
+- 棋盘、棋子、按钮、字体与提示栏会按窗口比例整体缩放
+- 鼠标点击会自动映射到缩放后的棋盘坐标，避免窗口变化后落子偏移
 
 ### 🧠 AI 引擎
 
@@ -80,6 +86,16 @@
 
 ## 快速开始
 
+### 方式一：Windows 启动脚本
+
+```bat
+run.bat
+```
+
+脚本会自动查找 `.venv\Scripts\python.exe` 或系统 `python`，并检查 Python 版本与 Pygame 依赖。
+
+### 方式二：命令行启动
+
 ```bash
 # 克隆项目
 git clone https://github.com/lanmao657/WZQ.git
@@ -94,7 +110,23 @@ pip install -r requirements.txt
 python main.py
 ```
 
-> 依赖仅 `pygame>=2.5.0`，零配置即装即玩。
+> 运行环境要求 Python 3.10+；依赖包含 `pygame-ce>=2.5.7` 与用于打包的 `pyinstaller>=6.13`。
+
+---
+
+## 打包为 Windows 可执行文件
+
+```bat
+build.bat
+```
+
+构建完成后会生成：
+
+```text
+dist\gomoku.exe
+```
+
+打包配置位于 `gomoku.spec`，会把 `records/classic` 内置棋谱一起打入程序。运行打包后的 `gomoku.exe` 时，用户保存的棋谱会写入可执行文件所在目录下的 `records/saved/`，便于后续继续回放或备份。
 
 ---
 
@@ -114,6 +146,7 @@ python main.py
 | 操作 | 说明 |
 |------|------|
 | **鼠标左键** | 落子 / 点击按钮 |
+| 拖拽窗口边缘 | 调整游戏窗口大小 |
 | **R** | 游戏结束后重新开始 |
 | **M** | 游戏结束后返回菜单 |
 | 侧边栏 **悔棋** | 撤回上一步（人机模式撤回两步） |
@@ -132,8 +165,11 @@ WZQ/
 ├── ai.py            # AI 引擎（Minimax + α-β 剪枝）
 ├── renderer.py      # Pygame 渲染器（棋盘、棋子、UI）
 ├── history.py       # 棋谱系统（保存/加载/回放控制）
+├── paths.py         # 开发环境与 PyInstaller 环境的资源路径处理
 ├── requirements.txt # 依赖声明
 ├── run.bat          # Windows 启动脚本
+├── build.bat        # Windows 打包脚本
+├── gomoku.spec      # PyInstaller 打包配置
 └── records/
     ├── classic/     # 内置经典棋谱
     │   ├── 横五绝杀——黑棋中路突破.json
@@ -151,7 +187,8 @@ main.py ──▶ game.py (状态机)
                ├──▶ rules.py    胜负判定
                ├──▶ ai.py       AI 对手
                ├──▶ renderer.py 界面渲染
-               └──▶ history.py  棋谱管理
+               ├──▶ history.py  棋谱管理
+               └──▶ paths.py    资源/用户数据路径
 ```
 
 **`game.py` 状态机**：
@@ -238,6 +275,17 @@ main.py ──▶ game.py (状态机)
 - 最后落子位置红色标记
 - 悬停高亮按钮
 - 游戏结束半透明遮罩弹窗
+- 窗口缩放时等比缩放棋盘、侧栏、字体和鼠标坐标映射
+
+</details>
+
+<details>
+<summary><b>资源路径与打包</b></summary>
+
+- 开发环境下，内置棋谱从项目目录 `records/classic/` 读取
+- PyInstaller 环境下，内置棋谱从 `_MEIPASS` 临时资源目录读取
+- 用户保存棋谱始终写入可写目录：源码运行时为项目目录，打包运行时为 `gomoku.exe` 所在目录
+- `gomoku.spec` 会收集 Pygame 数据文件，并打包经典棋谱资源
 
 </details>
 
