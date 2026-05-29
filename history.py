@@ -3,10 +3,11 @@
 import json
 import os
 from datetime import datetime
+from paths import resource_path, user_data_path
 
 RECORDS_DIR = "records"
-CLASSIC_DIR = os.path.join(RECORDS_DIR, "classic")
-SAVED_DIR = os.path.join(RECORDS_DIR, "saved")
+CLASSIC_DIR = resource_path(RECORDS_DIR, "classic")
+SAVED_DIR = user_data_path(RECORDS_DIR, "saved")
 
 
 class GameRecord:
@@ -61,10 +62,10 @@ class GameRecord:
             ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
             mode = self.meta.get("mode", "game")
             filename = f"{ts}_{mode}.json"
-        filepath = os.path.join(SAVED_DIR, filename)
+        filepath = SAVED_DIR / filename
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(self.to_dict(), f, ensure_ascii=False, indent=2)
-        return filepath
+        return str(filepath)
 
     @classmethod
     def load(cls, filepath):
@@ -80,18 +81,19 @@ class GameRecord:
         files = []
         for f in os.listdir(SAVED_DIR):
             if f.endswith(".json"):
-                files.append(os.path.join(SAVED_DIR, f))
+                files.append(str(SAVED_DIR / f))
         files.sort(key=os.path.getmtime, reverse=True)
         return files
 
     @classmethod
     def list_classic(cls):
         """列出所有内置经典棋谱。"""
-        os.makedirs(CLASSIC_DIR, exist_ok=True)
+        if not CLASSIC_DIR.exists():
+            return []
         files = []
         for f in os.listdir(CLASSIC_DIR):
             if f.endswith(".json"):
-                files.append(os.path.join(CLASSIC_DIR, f))
+                files.append(str(CLASSIC_DIR / f))
         return files
 
 

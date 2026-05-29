@@ -50,6 +50,9 @@ class Game:
                     running = False
                     break
 
+                if event.type in self._resize_event_types():
+                    self._resize_window(self._event_size(event))
+
                 if event.type == pygame.KEYDOWN:
                     if self.state == STATE_GAME_OVER:
                         if event.key == pygame.K_r:
@@ -78,6 +81,22 @@ class Game:
             pygame.display.flip()
 
         pygame.quit()
+
+    def _resize_event_types(self):
+        """兼容不同 Pygame 版本的窗口缩放事件。"""
+        return (pygame.VIDEORESIZE, getattr(pygame, "WINDOWRESIZED", -1))
+
+    def _event_size(self, event):
+        """读取不同 Pygame 版本中的 resize 事件尺寸。"""
+        if hasattr(event, "size"):
+            return event.size
+        return event.x, event.y
+
+    def _resize_window(self, size):
+        """响应窗口拖拽缩放。"""
+        width, height = max(1, size[0]), max(1, size[1])
+        self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+        self.renderer.screen = self.screen
 
     def _handle_click(self, pos):
         """处理鼠标点击事件。"""
@@ -147,14 +166,14 @@ class Game:
 
     def _handle_replay_select_click(self, pos):
         """处理棋谱选择点击。"""
-        back_rect = pygame.Rect(20, 20, 80, 35)
+        back_rect = self.renderer.scale_rect(20, 20, 80, 35)
         if back_rect.collidepoint(pos):
             self.state = STATE_MENU
             return
 
         records = GameRecord.list_classic() + GameRecord.list_saved()
         for i, filepath in enumerate(records):
-            btn_rect = pygame.Rect(100, 100 + i * 50, 600, 40)
+            btn_rect = self.renderer.scale_rect(100, 100 + i * 50, 600, 40)
             if btn_rect.collidepoint(pos):
                 self._start_replay(filepath)
                 return
@@ -179,14 +198,14 @@ class Game:
 
     def _handle_load_select_click(self, pos):
         """处理加载棋谱选择点击。"""
-        back_rect = pygame.Rect(20, 20, 80, 35)
+        back_rect = self.renderer.scale_rect(20, 20, 80, 35)
         if back_rect.collidepoint(pos):
             self.state = STATE_MENU
             return
 
         records = GameRecord.list_saved()
         for i, filepath in enumerate(records):
-            btn_rect = pygame.Rect(100, 100 + i * 50, 600, 40)
+            btn_rect = self.renderer.scale_rect(100, 100 + i * 50, 600, 40)
             if btn_rect.collidepoint(pos):
                 self._load_and_resume(filepath)
                 return
@@ -396,12 +415,13 @@ class Game:
     def _draw_replay_list(self, mouse_pos):
         """绘制棋谱选择列表。"""
         self.screen.fill((222, 184, 104))
+        content = self.renderer.content_rect()
         title = self.renderer.font_large.render("选择棋谱", True, (60, 45, 15))
-        self.screen.blit(title, (400 - title.get_width() // 2, 40))
+        self.screen.blit(title, (content.centerx - title.get_width() // 2, self.renderer.scale_y(40)))
 
         # 返回按钮
-        back_rect = pygame.Rect(20, 20, 80, 35)
-        pygame.draw.rect(self.screen, (160, 130, 60), back_rect, border_radius=6)
+        back_rect = self.renderer.scale_rect(20, 20, 80, 35)
+        pygame.draw.rect(self.screen, (160, 130, 60), back_rect, border_radius=self.renderer.scale_len(6))
         text = self.renderer.font_small.render("返回", True, (255, 255, 255))
         self.screen.blit(text, (back_rect.centerx - text.get_width() // 2,
                                  back_rect.centery - text.get_height() // 2))
@@ -409,17 +429,17 @@ class Game:
         records = GameRecord.list_classic() + GameRecord.list_saved()
         if not records:
             empty = self.renderer.font_medium.render("暂无棋谱", True, (60, 45, 15))
-            self.screen.blit(empty, (400 - empty.get_width() // 2, 200))
+            self.screen.blit(empty, (content.centerx - empty.get_width() // 2, self.renderer.scale_y(200)))
             return
 
         for i, filepath in enumerate(records):
-            btn_rect = pygame.Rect(100, 100 + i * 50, 600, 40)
+            btn_rect = self.renderer.scale_rect(100, 100 + i * 50, 600, 40)
             hover = btn_rect.collidepoint(mouse_pos)
             color = (180, 150, 80) if hover else (160, 130, 60)
-            pygame.draw.rect(self.screen, color, btn_rect, border_radius=6)
+            pygame.draw.rect(self.screen, color, btn_rect, border_radius=self.renderer.scale_len(6))
             name = os.path.basename(filepath)
             text = self.renderer.font_small.render(name, True, (255, 255, 255))
-            self.screen.blit(text, (btn_rect.x + 15, btn_rect.centery - text.get_height() // 2))
+            self.screen.blit(text, (btn_rect.x + self.renderer.scale_len(15), btn_rect.centery - text.get_height() // 2))
 
     def _draw_replay(self, mouse_pos):
         """绘制回放界面。"""
@@ -437,9 +457,9 @@ class Game:
         self.renderer.draw_pieces(self.board, last)
 
         # 标题栏
-        pygame.draw.rect(self.screen, (200, 168, 90), (0, 0, 800, 50))
+        pygame.draw.rect(self.screen, (200, 168, 90), self.renderer.scale_rect(0, 0, 800, 50))
         title = self.renderer.font_large.render("棋谱回放", True, (60, 45, 15))
-        self.screen.blit(title, (20, 8))
+        self.screen.blit(title, (self.renderer.scale_x(20), self.renderer.scale_y(8)))
 
         # 回放控制栏
         if self.replay_ctrl:
