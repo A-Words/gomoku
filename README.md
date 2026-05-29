@@ -1,202 +1,256 @@
-# 五子棋
+<div align="center">
 
-一个基于 Python + Pygame 的五子棋桌面游戏，支持双人对弈、人机对战、悔棋、棋谱保存与回放，并内置经典棋谱示例。
-
-## 功能特性
-
-- 15x15 标准五子棋棋盘
-- 双人对弈模式
-- 人机对战模式，包含简单、中等、困难三档 AI 难度
-- AI 使用 Minimax 搜索与 Alpha-Beta 剪枝，并带候选点剪枝
-- 每步落子自动记录，可保存为 JSON 棋谱
-- 支持内置经典棋谱回放、上一步、下一步、自动播放和接管对弈
-- 支持悔棋、重新开始、返回菜单
-- 支持拖拽调整大小的 Pygame 窗口，木质棋盘视觉风格
-- 支持 PyInstaller 打包为 Windows 可执行文件
-
-## 运行环境
-
-- Windows
-- Python 3.10 或更高版本
-- pip
-
-项目依赖见 [requirements.txt](requirements.txt)：
-
-```txt
-pygame-ce>=2.5.7
-pyinstaller>=6.13
 ```
+    ╔══════════════════════════════════════════════╗
+    ║     ╱╲     ╱╲     ╱╲     ╱╲     ╱╲          ║
+    ║    ╱  ╲   ╱●╲   ╱○╲   ╱●╲   ╱○╲         ║
+    ║   ╱    ╲ ╱    ╲ ╱    ╲ ╱    ╲ ╱    ╲        ║
+    ║          五 子 棋 对 弈 游 戏                ║
+    ║        Gomoku Battle Arena                   ║
+    ╚══════════════════════════════════════════════╝
+```
+
+# 五子棋 · Gomoku
+
+**基于 Pygame 的五子棋对弈游戏，内置 Minimax + Alpha-Beta 剪枝 AI、经典棋谱回放与完整的对局管理系统。**
+
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pygame](https://img.shields.io/Pygame-2.5+-00979D?style=for-the-badge&logo=pygame&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey?style=for-the-badge)
+
+</div>
+
+---
+
+## 核心功能
+
+### 🎮 三种对弈模式
+
+| 模式 | 说明 |
+|------|------|
+| **双人对弈** | 本地双人轮流落子，支持悔棋 |
+| **人机对战** | 对抗 AI，三档难度可选 |
+| **棋谱回放** | 内置 3 局经典棋谱 + 自定义保存，支持逐步回放与中途接管 |
+
+### 🧠 AI 引擎
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  AI 决策流水线                        │
+│                                                     │
+│  棋盘状态 ──▶ 候选点生成 ──▶ 紧急着法检测            │
+│                                    │                │
+│                    ┌───────────────┤                │
+│                    ▼               ▼                │
+│              必胜/必防?        Minimax 搜索          │
+│              直接返回          + Alpha-Beta 剪枝     │
+│                                    │                │
+│                                    ▼                │
+│                             局面评估函数             │
+│                             返回最优着法             │
+└─────────────────────────────────────────────────────┘
+```
+
+- **Minimax 搜索** + **Alpha-Beta 剪枝**，搜索深度可配置
+- **棋型识别**：连五 / 活四 / 冲四 / 活三 / 眠三 / 活二 / 眠二
+- **紧急着法优先**：能赢直接赢，能防立刻防
+- **候选点裁剪**：仅评估棋子周围 2 格内的有效空位，大幅提升性能
+
+| 难度 | 搜索深度 | 候选点数 | 特点 |
+|:----:|:--------:|:--------:|------|
+| 简单 | 2 | 5 | 加入随机性，适合新手 |
+| 中等 | 3 | 8 | 稳扎稳打，有一定挑战 |
+| 困难 | 4 | 10 | 全力计算，需要认真应对 |
+
+### 📜 经典棋谱
+
+内置 3 局精选对局，每局最后一步均形成五连：
+
+| 棋谱 | 名称 | 结果 | 亮点 |
+|------|------|:----:|------|
+| `横五绝杀——黑棋中路突破.json` | 黑胜 | 水平五连，中路强攻 |
+| `白棋妙手——纵四绝杀.json` | 白胜 | 垂直突破，白棋后发制人 |
+| `竖五连珠——黑棋强攻.json` | 黑胜 | 纵向连珠，步步紧逼 |
+
+棋谱回放支持 **逐步播放**、**自动播放**、**中途接管** 继续对弈。
+
+---
 
 ## 快速开始
 
-### 1. 创建虚拟环境
+```bash
+# 克隆项目
+git clone https://github.com/lanmao657/WZQ.git
+cd WZQ
 
-```powershell
+# 创建虚拟环境 & 安装依赖
 python -m venv .venv
-.\.venv\Scripts\activate
-```
+.venv\Scripts\activate
+pip install -r requirements.txt
 
-### 2. 安装依赖
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-### 3. 启动游戏
-
-可以直接运行 Python 入口：
-
-```powershell
+# 启动游戏
 python main.py
 ```
 
-也可以双击或执行项目内的批处理脚本：
+> 依赖仅 `pygame>=2.5.0`，零配置即装即玩。
 
-```powershell
-.\run.bat
+---
+
+## 操作指南
+
+```
+┌───────────────────────────────────────────┐
+│            主菜单                         │
+│  ┌─────────────┐                         │
+│  │  双人对弈    │  ──▶  PVP 模式         │
+│  │  人机对战    │  ──▶  选择难度 ▶ PVE   │
+│  │  棋谱回放    │  ──▶  选择棋谱 ▶ 回放  │
+│  └─────────────┘                         │
+└───────────────────────────────────────────┘
 ```
 
-`run.bat` 会自动检查 Python 版本和运行依赖。如果缺少依赖，请先执行安装命令。
+| 操作 | 说明 |
+|------|------|
+| **鼠标左键** | 落子 / 点击按钮 |
+| **R** | 游戏结束后重新开始 |
+| **M** | 游戏结束后返回菜单 |
+| 侧边栏 **悔棋** | 撤回上一步（人机模式撤回两步） |
+| 侧边栏 **保存棋谱** | 将当前对局保存为 JSON 文件 |
 
-## 打包
+---
 
-项目已提供 PyInstaller 配置 [gomoku.spec](gomoku.spec) 和构建脚本 [build.bat](build.bat)。
+## 项目架构
 
-```powershell
-.\build.bat
+```
+WZQ/
+├── main.py          # 程序入口
+├── game.py          # 游戏状态机与调度核心
+├── board.py         # 15×15 棋盘数据结构
+├── rules.py         # 胜负判定（五连/平局）
+├── ai.py            # AI 引擎（Minimax + α-β 剪枝）
+├── renderer.py      # Pygame 渲染器（棋盘、棋子、UI）
+├── history.py       # 棋谱系统（保存/加载/回放控制）
+├── requirements.txt # 依赖声明
+├── run.bat          # Windows 启动脚本
+└── records/
+    ├── classic/     # 内置经典棋谱
+    │   ├── 横五绝杀——黑棋中路突破.json
+    │   ├── 白棋妙手——纵四绝杀.json
+    │   └── 竖五连珠——黑棋强攻.json
+    └── saved/       # 用户保存的棋谱（自动创建）
 ```
 
-构建成功后，可执行文件会生成在：
+### 模块职责
 
-```txt
-dist\gomoku.exe
+```
+main.py ──▶ game.py (状态机)
+               │
+               ├──▶ board.py    棋盘数据（落子/悔棋/重置）
+               ├──▶ rules.py    胜负判定
+               ├──▶ ai.py       AI 对手
+               ├──▶ renderer.py 界面渲染
+               └──▶ history.py  棋谱管理
 ```
 
-打包时会把 `records/classic` 中的内置经典棋谱一起带入程序资源。
+**`game.py` 状态机**：
 
-## 游戏说明
-
-### 主菜单
-
-- `双人对弈`：黑白双方轮流由玩家落子
-- `人机对战`：玩家执黑先手，AI 执白后手
-- `棋谱回放`：选择内置或已保存的棋谱进行回放
-
-### 对弈操作
-
-- 鼠标点击棋盘交叉点落子
-- `悔 棋`：撤销上一步；人机模式会撤销玩家和 AI 各一步
-- `重新开始`：重置当前模式并开始新局
-- `保存棋谱`：保存当前对局记录
-- `返回菜单`：回到主菜单
-
-游戏结束后：
-
-- 按 `R` 重新开始
-- 按 `M` 返回主菜单
-
-### 棋谱回放
-
-回放界面支持：
-
-- `上一步`
-- `下一步`
-- `自动播放`
-- `接管`：从当前回放局面继续双人对弈
-
-## 项目结构
-
-```txt
-.
-├── main.py                         # 游戏入口
-├── game.py                         # 游戏状态机与主循环
-├── board.py                        # 棋盘数据结构、落子、悔棋
-├── rules.py                        # 五子连珠和平局判定
-├── ai.py                           # AI 对手与局面评估
-├── renderer.py                     # Pygame 绘制逻辑
-├── history.py                      # 棋谱保存、加载、回放控制
-├── paths.py                        # 开发环境与打包环境的路径处理
-├── requirements.txt                # Python 依赖
-├── run.bat                         # Windows 启动脚本
-├── build.bat                       # Windows 打包脚本
-├── gomoku.spec                     # PyInstaller 配置
-├── records
-│   └── classic                     # 内置经典棋谱
-└── docs
-    └── superpowers                 # 设计规格与实现计划
+```
+         ┌──────────┐
+         │   MENU   │
+         └────┬─────┘
+    ┌─────────┼──────────┐
+    ▼         ▼          ▼
+ PVP/PVE  DIFFICULTY   REPLAY_SELECT
+    │         │          │
+    ▼         ▼          ▼
+ PLAYING ◀───┘      REPLAY ◀──▶ PLAYING (接管)
+    │
+    ▼
+ GAME_OVER ──▶ MENU / PLAYING
 ```
 
-## 棋谱文件
+---
 
-棋谱使用 JSON 格式保存，结构示例：
+## 棋谱格式
+
+棋谱以 JSON 格式存储，结构清晰，易于编辑与分享：
 
 ```json
 {
   "meta": {
-    "date": "2026-05-29 22:30",
-    "mode": "pvp",
-    "difficulty": "",
+    "date": "横五绝杀——黑棋中路突破",
+    "mode": "经典",
     "result": "黑胜",
-    "total_moves": 9
+    "total_moves": 35
   },
   "moves": [
-    {
-      "step": 1,
-      "color": "black",
-      "pos": [7, 7]
-    }
+    {"step": 1, "color": "black", "pos": [7, 7]},
+    {"step": 2, "color": "white", "pos": [8, 8]}
   ]
 }
 ```
 
-棋谱目录：
+坐标系以 15×15 棋盘左上角为 `[0, 0]`，天元位于 `[7, 7]`。
 
-- 内置棋谱：`records/classic`
-- 用户保存棋谱：`records/saved`
+---
 
-开发环境下，保存的棋谱会写入项目目录的 `records/saved`。打包为 exe 后，保存的棋谱会写入 exe 所在目录旁边的 `records/saved`。
+## 技术细节
 
-## 开发说明
+<details>
+<summary><b>AI 评估函数</b></summary>
 
-核心模块职责清晰分离：
+棋型评分体系：
 
-- `Board` 只维护棋盘数据和落子历史
-- `rules.py` 只负责胜负和平局判断
-- `Renderer` 只负责绘制界面，不处理业务逻辑
-- `AI` 只根据当前棋盘返回落子坐标
-- `Game` 负责状态流转、事件处理和模块调度
-- `GameRecord` 与 `ReplayController` 负责棋谱序列化和回放状态
+| 棋型 | 分值 | 说明 |
+|------|-----:|------|
+| 连五 | 1,000,000 | 五子连珠，直接获胜 |
+| 活四 | 100,000 | 两端均开放的四连 |
+| 冲四 | 10,000 | 一端被堵的四连 |
+| 活三 | 5,000 | 两端均开放的三连 |
+| 眠三 | 500 | 一端被堵的三连 |
+| 活二 | 200 | 两端均开放的二连 |
+| 眠二 | 50 | 一端被堵的二连 |
 
-如果只修改规则或 AI，可优先从 [rules.py](rules.py) 和 [ai.py](ai.py) 入手；如果要调整界面布局或按钮样式，主要修改 [renderer.py](renderer.py)。
+局面总分 = AI 棋型分 - 对手棋型分
 
-## 常见问题
+</details>
 
-### 提示未检测到 Python
+<details>
+<summary><b>候选点生成策略</b></summary>
 
-请安装 Python 3.10 或更高版本，并在安装时勾选 `Add python.exe to PATH`。
+1. 扫描棋盘，找出所有已有棋子
+2. 对每颗棋子，取周围 2 格范围内的空位作为候选
+3. 对候选点进行快速评估打分
+4. 按分数降序排列，取前 N 个（N 由难度决定）
 
-### 提示缺少运行依赖
+这一策略避免了遍历全部 225 个空位，将搜索空间压缩至 5~10 个高价值点。
 
-执行：
+</details>
 
-```powershell
-python -m pip install -r requirements.txt
-```
+<details>
+<summary><b>渲染器特性</b></summary>
 
-### 中文字体显示异常
+- 15×15 棋盘网格，带 A~O 列标和 1~15 行号
+- 5 个星位标记（天元 + 四星）
+- 黑白棋子带高光渐变效果
+- 最后落子位置红色标记
+- 悬停高亮按钮
+- 游戏结束半透明遮罩弹窗
 
-程序会优先查找 Windows 系统字体，例如微软雅黑或黑体。如果在非 Windows 环境运行，可能需要调整 [renderer.py](renderer.py) 中的字体查找逻辑。
+</details>
 
-### 打包失败
+---
 
-先确认依赖已安装：
+## 许可
 
-```powershell
-python -m pip install -r requirements.txt
-```
+MIT License
 
-然后重新执行：
+---
 
-```powershell
-.\build.bat
-```
+<div align="center">
+
+**Built with Pygame**
+
+</div>

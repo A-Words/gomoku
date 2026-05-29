@@ -1,10 +1,10 @@
 {
   "meta": {
-    "date": "经典棋谱",
+    "date": "白棋妙手——纵四绝杀",
     "mode": "经典",
     "difficulty": "",
     "result": "白胜",
-    "total_moves": 42
+    "total_moves": 40
   },
   "moves": [
     {"step": 1, "color": "black", "pos": [7, 7]},
@@ -46,8 +46,6 @@
     {"step": 37, "color": "black", "pos": [11, 5]},
     {"step": 38, "color": "white", "pos": [10, 4]},
     {"step": 39, "color": "black", "pos": [12, 4]},
-    {"step": 40, "color": "white", "pos": [9, 4]},
-    {"step": 41, "color": "black", "pos": [6, 9]},
-    {"step": 42, "color": "white", "pos": [5, 7]}
+    {"step": 40, "color": "white", "pos": [9, 4]}
   ]
 }
