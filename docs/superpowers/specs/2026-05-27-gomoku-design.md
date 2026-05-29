@@ -21,7 +21,7 @@
 | 项目 | 选择 |
 |------|------|
 | 语言 | Python 3.10+ |
-| 图形库 | Pygame 2.x |
+| 图形库 | pygame-ce 2.5.7+（兼容 pygame API） |
 | AI 算法 | Minimax + Alpha-Beta 剪枝 |
 | 棋谱格式 | JSON |
 | 字体 | 微软雅黑 / 思源黑体 |
@@ -235,5 +235,5 @@ MENU → PLAYING → GAME_OVER
 ## 依赖
 
 ```
-pygame>=2.5.0
+pygame-ce>=2.5.7
 ```
