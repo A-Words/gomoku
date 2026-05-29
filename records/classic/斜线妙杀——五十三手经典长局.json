@@ -1,0 +1,436 @@
+{
+  "meta": {
+    "date": "斜线妙杀——五十三手经典长局",
+    "mode": "经典",
+    "difficulty": "",
+    "result": "黑胜",
+    "total_moves": 53,
+    "source": "renju.net tournament 3560 game 181012"
+  },
+  "moves": [
+    {
+      "step": 1,
+      "color": "black",
+      "pos": [
+        7,
+        7
+      ]
+    },
+    {
+      "step": 2,
+      "color": "white",
+      "pos": [
+        6,
+        7
+      ]
+    },
+    {
+      "step": 3,
+      "color": "black",
+      "pos": [
+        8,
+        6
+      ]
+    },
+    {
+      "step": 4,
+      "color": "white",
+      "pos": [
+        6,
+        8
+      ]
+    },
+    {
+      "step": 5,
+      "color": "black",
+      "pos": [
+        7,
+        8
+      ]
+    },
+    {
+      "step": 6,
+      "color": "white",
+      "pos": [
+        7,
+        9
+      ]
+    },
+    {
+      "step": 7,
+      "color": "black",
+      "pos": [
+        6,
+        9
+      ]
+    },
+    {
+      "step": 8,
+      "color": "white",
+      "pos": [
+        5,
+        7
+      ]
+    },
+    {
+      "step": 9,
+      "color": "black",
+      "pos": [
+        8,
+        10
+      ]
+    },
+    {
+      "step": 10,
+      "color": "white",
+      "pos": [
+        8,
+        7
+      ]
+    },
+    {
+      "step": 11,
+      "color": "black",
+      "pos": [
+        4,
+        6
+      ]
+    },
+    {
+      "step": 12,
+      "color": "white",
+      "pos": [
+        7,
+        6
+      ]
+    },
+    {
+      "step": 13,
+      "color": "black",
+      "pos": [
+        6,
+        5
+      ]
+    },
+    {
+      "step": 14,
+      "color": "white",
+      "pos": [
+        5,
+        8
+      ]
+    },
+    {
+      "step": 15,
+      "color": "black",
+      "pos": [
+        4,
+        9
+      ]
+    },
+    {
+      "step": 16,
+      "color": "white",
+      "pos": [
+        4,
+        8
+      ]
+    },
+    {
+      "step": 17,
+      "color": "black",
+      "pos": [
+        3,
+        8
+      ]
+    },
+    {
+      "step": 18,
+      "color": "white",
+      "pos": [
+        3,
+        9
+      ]
+    },
+    {
+      "step": 19,
+      "color": "black",
+      "pos": [
+        2,
+        10
+      ]
+    },
+    {
+      "step": 20,
+      "color": "white",
+      "pos": [
+        5,
+        10
+      ]
+    },
+    {
+      "step": 21,
+      "color": "black",
+      "pos": [
+        5,
+        9
+      ]
+    },
+    {
+      "step": 22,
+      "color": "white",
+      "pos": [
+        10,
+        6
+      ]
+    },
+    {
+      "step": 23,
+      "color": "black",
+      "pos": [
+        7,
+        5
+      ]
+    },
+    {
+      "step": 24,
+      "color": "white",
+      "pos": [
+        9,
+        7
+      ]
+    },
+    {
+      "step": 25,
+      "color": "black",
+      "pos": [
+        8,
+        8
+      ]
+    },
+    {
+      "step": 26,
+      "color": "white",
+      "pos": [
+        9,
+        5
+      ]
+    },
+    {
+      "step": 27,
+      "color": "black",
+      "pos": [
+        8,
+        5
+      ]
+    },
+    {
+      "step": 28,
+      "color": "white",
+      "pos": [
+        5,
+        5
+      ]
+    },
+    {
+      "step": 29,
+      "color": "black",
+      "pos": [
+        8,
+        4
+      ]
+    },
+    {
+      "step": 30,
+      "color": "white",
+      "pos": [
+        8,
+        3
+      ]
+    },
+    {
+      "step": 31,
+      "color": "black",
+      "pos": [
+        9,
+        8
+      ]
+    },
+    {
+      "step": 32,
+      "color": "white",
+      "pos": [
+        10,
+        8
+      ]
+    },
+    {
+      "step": 33,
+      "color": "black",
+      "pos": [
+        10,
+        7
+      ]
+    },
+    {
+      "step": 34,
+      "color": "white",
+      "pos": [
+        8,
+        9
+      ]
+    },
+    {
+      "step": 35,
+      "color": "black",
+      "pos": [
+        7,
+        4
+      ]
+    },
+    {
+      "step": 36,
+      "color": "white",
+      "pos": [
+        9,
+        6
+      ]
+    },
+    {
+      "step": 37,
+      "color": "black",
+      "pos": [
+        6,
+        4
+      ]
+    },
+    {
+      "step": 38,
+      "color": "white",
+      "pos": [
+        5,
+        4
+      ]
+    },
+    {
+      "step": 39,
+      "color": "black",
+      "pos": [
+        5,
+        6
+      ]
+    },
+    {
+      "step": 40,
+      "color": "white",
+      "pos": [
+        4,
+        7
+      ]
+    },
+    {
+      "step": 41,
+      "color": "black",
+      "pos": [
+        9,
+        3
+      ]
+    },
+    {
+      "step": 42,
+      "color": "white",
+      "pos": [
+        10,
+        2
+      ]
+    },
+    {
+      "step": 43,
+      "color": "black",
+      "pos": [
+        6,
+        2
+      ]
+    },
+    {
+      "step": 44,
+      "color": "white",
+      "pos": [
+        6,
+        3
+      ]
+    },
+    {
+      "step": 45,
+      "color": "black",
+      "pos": [
+        7,
+        1
+      ]
+    },
+    {
+      "step": 46,
+      "color": "white",
+      "pos": [
+        2,
+        7
+      ]
+    },
+    {
+      "step": 47,
+      "color": "black",
+      "pos": [
+        3,
+        7
+      ]
+    },
+    {
+      "step": 48,
+      "color": "white",
+      "pos": [
+        5,
+        3
+      ]
+    },
+    {
+      "step": 49,
+      "color": "black",
+      "pos": [
+        10,
+        4
+      ]
+    },
+    {
+      "step": 50,
+      "color": "white",
+      "pos": [
+        9,
+        4
+      ]
+    },
+    {
+      "step": 51,
+      "color": "black",
+      "pos": [
+        8,
+        2
+      ]
+    },
+    {
+      "step": 52,
+      "color": "white",
+      "pos": [
+        11,
+        5
+      ]
+    },
+    {
+      "step": 53,
+      "color": "black",
+      "pos": [
+        6,
+        0
+      ]
+    }
+  ]
+}
