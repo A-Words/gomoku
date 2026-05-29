@@ -1,17 +1,14 @@
 @echo off
 setlocal
+chcp 65001 >nul
 cd /d "%~dp0"
 
 set "PYTHON="
-if exist ".venv\Scripts\python.exe" (
-  set "PYTHON=.venv\Scripts\python.exe"
-) else if exist ".venv\Scripts\python3.exe" (
-  set "PYTHON=.venv\Scripts\python3.exe"
-) else (
+if exist ".venv\Scripts\python.exe" set "PYTHON=.venv\Scripts\python.exe"
+if not defined PYTHON if exist ".venv\Scripts\python3.exe" set "PYTHON=.venv\Scripts\python3.exe"
+if not defined PYTHON (
   where python >nul 2>nul
-  if not errorlevel 1 (
-    set "PYTHON=python"
-  )
+  if not errorlevel 1 set "PYTHON=python"
 )
 
 if not defined PYTHON (
@@ -22,7 +19,7 @@ if not defined PYTHON (
   exit /b 1
 )
 
-"%PYTHON%" -c "import sys; raise SystemExit(sys.version_info < (3, 10))" >nul 2>nul
+"%PYTHON%" -c "import sys; raise SystemExit(sys.version_info[0] == 3 and sys.version_info[1] in [0,1,2,3,4,5,6,7,8,9])" >nul 2>nul
 if errorlevel 1 (
   echo Python 不可用或版本过低。
   echo 请安装 Python 3.10 或更高版本，并确认已添加到 PATH。
